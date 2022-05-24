@@ -4,6 +4,7 @@ Code for @YetAnotherPriceCheckerBot
 
 import telebot
 from telebot import types
+from bs4_test import parser
 
 bot = telebot.TeleBot(
     "5320442299:AAG0L8KCm5zTVeU66taTDM-TTi3BkeARFYY")  # You can set parse_mode by default. HTML or MARKDOWN
@@ -15,27 +16,18 @@ def start(message):
         bot.send_message(message.chat.id, "Привет! Чем я могу тебе помочь?")
 
 
-"""
-@bot.message_handler(func=lambda message: True) #for gibberish messages
-def echo_all(message):
-    bot.reply_to(message, "Прости, я тебя не понимаю, попробуй написать /help ")
-"""
+@bot.message_handler(commands=['price'])  # for photos user sends
+def get_user_price(message):
+    msg = bot.send_message(message.chat.id, 'Введите ссылку на товар:')
+    bot.register_next_step_handler(msg, get_user_text)
 
-"""
-@bot.message_handler(content_types=['text'])  # for other text messages user sends
+
 def get_user_text(message):
-    if message.text == "Hello":
-        bot.send_message(message.chat.id, 'И тебе привет!', parse_mode='html')
-    elif message.text == "id":
-        bot.send_message(message.chat.id, f"Твой ID: {message.from_user.id}", parse_mode='html')
+    if 'http' in message.text:
+        price = parser(message.text)
+        bot.send_message(message.chat.id, price)
     else:
-        bot.send_message(message.chat.id, "Прости, я тебя не понимаю, попробуй написать /help ", parse_mode='html')
-"""
-
-
-@bot.message_handler(content_types=['photo'])  # for photos user sends
-def get_user_photo(message):
-    bot.send_message(message.chat.id, 'Вау, крутое фото!')
+        bot.reply_to(message, "Ссылка невалидна!")
 
 
 @bot.message_handler(commands=['website'])
@@ -53,6 +45,11 @@ def buttons(message):
 
     markup.add(website_user_command, start_user_command)
     bot.send_message(message.chat.id, 'Глянь на это!', reply_markup=markup)
+
+
+@bot.message_handler(content_types=['url'])
+def url(message):
+    bot.send_message(message.chat.id, message)
 
 
 bot.polling(none_stop=True)

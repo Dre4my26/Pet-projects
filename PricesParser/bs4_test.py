@@ -6,9 +6,10 @@ That is more or less working way to parse prices from sites different from Ozon,
 """
 
 
-def parser():
-    print("please, insert the link:")
-    link = str(input())
+def parser(link):
+    price = 0
+    #print("please, insert the link:")
+    #link = str(input())
     r = requests.get(link).text
     soup = BeautifulSoup(r, "html.parser")
     soup = soup.text
@@ -19,8 +20,3 @@ def parser():
             price = int(text_from_site[i + 1])
 
     return price
-
-
-price = parser()
-
-print(f"Price for this good is: {price}.")
