@@ -13,7 +13,10 @@ bot = telebot.TeleBot(
 @bot.message_handler(commands=['start'])  # for commands 'start' and 'help'
 def start(message):
     if message.text == "/start":
-        bot.send_message(message.chat.id, "Привет! Чем я могу тебе помочь?")
+        bot.send_message(message.chat.id, "Привет! Я - бот для парсинга цен и их суммирования. Моя прелесть состоит в "
+                                          "том, что я могу <i>суммировать цены на товары с разных сайтов</i>. Для"
+                                          " парсинга цены с какого-либо сайта введи команду <b>/price</b>",
+                         parse_mode="html")
 
 
 @bot.message_handler(commands=['price'])  # for photos user sends
@@ -24,8 +27,7 @@ def get_user_price(message):
 
 def get_user_text(message):
     if 'http' in message.text:
-        price = parser(message.text)
-        bot.send_message(message.chat.id, price)
+        bot.send_message(message.chat.id, parser(message.text))
     else:
         bot.reply_to(message, "Ссылка невалидна!")
 
@@ -33,13 +35,13 @@ def get_user_text(message):
 @bot.message_handler(commands=['website'])
 def website(message):
     markup = types.InlineKeyboardMarkup()  # created in-text buttons
-    markup.add(types.InlineKeyboardButton("Посетить вебсайт", url="https://vk.com/dreamy26"))
+    markup.add(types.InlineKeyboardButton("Страница создателя", url="https://vk.com/dreamy26"))
     bot.send_message(message.chat.id, 'Глянь на это!', reply_markup=markup)
 
 
 @bot.message_handler(commands=['help'])
 def buttons(message):
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=1)  # created user buttons
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)  # created user buttons
     website_user_command = types.KeyboardButton('/website')
     start_user_command = types.KeyboardButton('/start')
 
