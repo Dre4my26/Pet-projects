@@ -19,7 +19,7 @@ def start(message):
                          parse_mode="html")
 
 
-@bot.message_handler(commands=['price'])  # for photos user sends
+@bot.message_handler(commands=['price'])  # operates with a link user sends
 def get_user_price(message):
     msg = bot.send_message(message.chat.id, 'Введите ссылку на товар:')
     bot.register_next_step_handler(msg, get_user_text)
