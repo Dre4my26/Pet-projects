@@ -1,8 +1,14 @@
 from bs4 import BeautifulSoup
 import requests
+import doctest
 
 """
 That is more or less working way to parse prices from sites different from Ozon, Yandex Market, e.t.c.
+"""
+"""
+Links for testing:
+https://market.yandex.ru/product--gliukozamin-khondroitinovyi-kompleks-kaps-60-fpsh-bad/1422663471?glfilter=17796083%3A60~60_227830179&cpa=1&cpc=lZmv57Na288TBs1Tttutnc1YjZf9faNzBI4hLcp_qkHdJ_2MB_ht3v_IvsvCNnPjt227wqsZtyT9tXfE2H81y4LU6b0BiLVqHyqeFANorUro3CU-XOXtc-u04Pe9myttLi6ckPjrb4DI4QSvp9W0Z49YW2-TKztTdCDgRnpFFCv679FjMtt4Gw%2C%2C&sku=227830179&offerid=d3a7F99_kwSRondon6hY0w
+https://sbermegamarket.ru/catalog/details/besprovodnye-naushniki-xiaomi-redmi-airdots-2-cn-black-600002233402/
 """
 
 
@@ -32,12 +38,28 @@ def parser_price(link):
 
 
 def parser_desc(link):
-    """This func returns the Title of an item"""
-    r = requests.get(link).text
+    """This func returns the Title of an item
+
+    >>> parser_desc("https://sbermegamarket.ru/catalog/details/besprovodnye-naushniki-xiaomi-redmi-airdots-2-cn-black-\
+600002233402")
+    'Беспроводные наушники Xiaomi '
+    >>> parser_desc("https://market.yandex.ru/product--gliukozamin-khondroitinovyi-kompleks-kaps-60-fpsh-bad/142266347\
+1?glfilter=17796083%3A60~60_227830179&cpa=1&cpc=lZmv57Na288TBs1Tttutnc1YjZf9faNzBI4hLcp_qkHdJ_2MB_ht3v_IvsvCNnPjt227wq\
+sZtyT9tXfE2H81y4LU6b0BiLVqHyqeFANorUro3CU-XOXtc-u04Pe9myttLi6ckPjrb4DI4QSvp9W0Z49YW2-TKztTdCDgRnpFFCv679FjMtt4Gw%2C%2C\
+&sku=227830179&offerid=d3a7F99_kwSRondon6hY0w")
+    'Глюкозамин-хондроитиновый комплекс капс. '
+    """
+
+    r = requests.get(link).content
     soup = BeautifulSoup(r, "html.parser")
     title = soup.title.text
+    title_list = title.split(" ")
+    title_short = title_list[:3]
+    title_fin = ''
+    for i in range(len(title_short)):
+        title_fin += title_short[i] + ' '
 
-    return title
+    return title_fin
 
 
 def cartSaver(chat_id):
@@ -45,3 +67,9 @@ def cartSaver(chat_id):
     chat.append(chat_id)
     for chat[chat_id] in chat:
         cart = {'name': parser_desc(), 'price': parser_price()}
+
+    return cart
+
+
+if __name__ == "__main__":
+    doctest.testmod()
