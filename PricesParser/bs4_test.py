@@ -43,11 +43,14 @@ def parser_desc(link):
     >>> parser_desc("https://sbermegamarket.ru/catalog/details/besprovodnye-naushniki-xiaomi-redmi-airdots-2-cn-black-\
 600002233402")
     'Беспроводные наушники Xiaomi '
-    >>> parser_desc("https://market.yandex.ru/product--gliukozamin-khondroitinovyi-kompleks-kaps-60-fpsh-bad/142266347\
-1?glfilter=17796083%3A60~60_227830179&cpa=1&cpc=lZmv57Na288TBs1Tttutnc1YjZf9faNzBI4hLcp_qkHdJ_2MB_ht3v_IvsvCNnPjt227wq\
-sZtyT9tXfE2H81y4LU6b0BiLVqHyqeFANorUro3CU-XOXtc-u04Pe9myttLi6ckPjrb4DI4QSvp9W0Z49YW2-TKztTdCDgRnpFFCv679FjMtt4Gw%2C%2C\
-&sku=227830179&offerid=d3a7F99_kwSRondon6hY0w")
-    'Глюкозамин-хондроитиновый комплекс капс. '
+    >>> parser_desc("https://market.yandex.ru/product--gliukozamin-khondroitinovyi-kompleks-kaps-60-fpsh-bad/1422663471\
+?glfilter=17796083%3A60~60_227830179&cpa=1&cpc=lZmv57Na288TBs1Tttutnc1YjZf9faNzBI4hLcp_qkHdJ_2MB_ht3v_IvsvCNnPjt227wqsZ\
+tyT9tXfE2H81y4LU6b0BiLVqHyqeFANorUro3CU-XOXtc-u04Pe9myttLi6ckPjrb4DI4QSvp9W0Z49YW2-TKztTdCDgRnpFFCv679FjMtt4Gw%2C%2C&sk\
+u=227830179&offerid=d3a7F99_kwSRondon6hY0w")
+    'Ой! '
+    >>> parser_desc("https://fast-anime.ru/Copybooks/originalnaya-tetrad-smerti/")
+    'Оригинальная "Тетрадь смерти" '
+
     """
 
     r = requests.get(link).content
